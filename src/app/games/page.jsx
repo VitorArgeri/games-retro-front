@@ -20,7 +20,7 @@ export default function Games() {
             try {
                 setLoading(true);
                 const response = await axios.get(`${url}/games`);
-                setGames(response.data);
+                setGames(response.data.games);
                 setLoading(false);
             } catch (error) {
                 console.error("Erro ao buscar os jogos na API");
@@ -85,6 +85,40 @@ export default function Games() {
                             </button>
                         </div>
                     </form>
+                </div>
+
+                {/* Lista de Games */}
+                <div className={styles.gameGrid}>
+                    {games.length === 0 ? (
+                        <div className={styles.noGames}>
+                            <p>Nenhum game encontrado.</p>
+                        </div>
+                    ) : (
+                        games.map((game) => (
+                            <div key={game.id} className={styles.gameCard}>
+                                <div className={styles.gameCardHeader}>
+                                    <h3 className={styles.gameTitle}>{game.name}</h3>
+                                </div>
+                                <div className={styles.gameCardBody}>
+                                    <p>
+                                        <strong>Plataforma:</strong> {game.platform}
+                                    </p>
+                                    <p>
+                                        <strong>ID:</strong> {game.id.substring(0, 8)}...
+                                    </p>
+                                    <p>
+                                        <strong>Criado em:</strong>{" "}
+                                        {new Date(game.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className={styles.gameCardFooter}>
+                                    <Link href={`/games/${game.id}`} className={styles.gameLink}>
+                                        Ver detalhes
+                                    </Link>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </main>
         </div>
